@@ -1,14 +1,22 @@
 import pg from 'pg';
 import dotenv from 'dotenv';
+import path from 'path'; // <--- Adicione a importação do path
+import { fileURLToPath } from 'url'; // <--- Adicione a importação da url
 
 const { Pool } = pg;
 
-// String de conexão mágica. Ajuste com o seu usuário e senha do PostgreSQL
-// Formato: postgresql://USUARIO:SENHA@HOST:PORTA/NOME_DO_BANCO
-// Usamos %22 (que representa aspas duplas na URL) em volta de CardapioAR para o Postgres aceitar as maiúsculas
-const connectionString = process.env.DATABASE_URL; 
+// Cria o equivalente ao __dirname clássico para ES Modules saber onde está a raiz
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
+// CORREÇÃO CRÍTICA: Força o dotenv a buscar o arquivo .env subindo duas pastas até a raiz do backend
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
+const connectionString = process.env.DATABASE_URL;
+
+if (!connectionString) {
+  console.error("❌ Erro crítico: A variável DATABASE_URL não pôde ser lida. O arquivo .env está no lugar correto?");
+}
 
 const pool = new Pool({
   connectionString: connectionString,
