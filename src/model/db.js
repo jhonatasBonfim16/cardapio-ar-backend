@@ -1,11 +1,12 @@
 import pg from 'pg';
+import dotenv from 'dotenv';
 
 const { Pool } = pg;
 
 // String de conexão mágica. Ajuste com o seu usuário e senha do PostgreSQL
 // Formato: postgresql://USUARIO:SENHA@HOST:PORTA/NOME_DO_BANCO
 // Usamos %22 (que representa aspas duplas na URL) em volta de CardapioAR para o Postgres aceitar as maiúsculas
-const connectionString = DATABASE_URL;
+const connectionString = process.env.DATABASE_URL; 
 
 
 
