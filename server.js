@@ -26,7 +26,7 @@ const PORT = process.env.PORT;
 
 // Configurações de CORS globais (Blindadas contra travamento do model-viewer)
 app.use(cors({
-  origin: 'http://127.0.0.1:5500' /*'https://cardapio-ar-frontend-git-main-devs-be44.vercel.app'*/,
+  origin: 'https://cardapio-ar-frontend-git-main-devs-be44.vercel.app',
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
   exposedHeaders: ['Content-Range', 'X-Content-Range']
