@@ -1,16 +1,8 @@
 import pg from 'pg';
-import dotenv from 'dotenv';
-import path from 'path'; // <--- Adicione a importação do path
-import { fileURLToPath } from 'url'; // <--- Adicione a importação da url
+import 'dotenv/config'
+
 
 const { Pool } = pg;
-
-// Cria o equivalente ao __dirname clássico para ES Modules saber onde está a raiz
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// CORREÇÃO CRÍTICA: Força o dotenv a buscar o arquivo .env subindo duas pastas até a raiz do backend
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const connectionString = process.env.DATABASE_URL;
 

@@ -1,33 +1,40 @@
 import express from 'express';
 import cors from 'cors';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
-// 1. IMPORTAÇÃO DO SEU SISTEMA DE ROTAS ISOLADO
-import apiRoutes from './src/routes/api.js';
+import listRouter from './src/routes/api.js';
+import postRouterInput from './src/routes/postInputApi.js'
+
+import rateLimit from 'express-rate-limit';
 
 const app = express();
+
+// Configuração do rate limit
+const limiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 15 minutos
+  max: 20, // Limite de até 100 requisições por IP dentro de `windowMs`
+  standardHeaders: true, // Retorna os headers `RateLimit-*` na resposta
+  legacyHeaders: false, // Desativa os headers `X-RateLimit-*` antigos
+  message: {
+    error: 'Muitas requisições feitas a partir deste IP, tente novamente mais tarde.'
+  }
+});
+
+// Aplica o limitador em todas as rotas
+app.use(limiter);
 // Usa a porta que o servidor de nuvem nos der, ou 3000 se estiver testando local
-const PORT = process.env.PORT || 3000; 
-
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const PORT = process.env.PORT; 
 
 // Configurações de CORS globais (Blindadas contra travamento do model-viewer)
 app.use(cors({
-  origin: '*',
+  origin: 'http://127.0.0.1:5500' /*'https://cardapio-ar-frontend-git-main-devs-be44.vercel.app'*/,
   methods: ['GET', 'POST', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'ngrok-skip-browser-warning', 'Range'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Range'],
   exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 
 app.use(express.json());
-
-
-// 2. CONEXÃO DA ROTA: Vincula todas as URLs criadas no api.js sob o prefixo '/api'
-// Isso faz o seu endpoint web se tornar oficialmente: http://192.168.100
-app.use('/api', apiRoutes);
+app.use('/api', listRouter);
+app.use('/api', postRouterInput)
 
 app.listen(PORT, () => {
   console.log(`🚀 SERVIDOR MVC PROFISSIONAL ATIVO!`);

@@ -1,6 +1,6 @@
-import express from 'express';
 import { listarPratos } from '../controllers/cardapioController.js'; // Importa a função do controller
 
+import express from 'express';
 const router = express.Router();
 
 // Quando o frontend der um fetch nesta rota, o controller 'listarPratos' é acionado
