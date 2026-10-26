@@ -17,6 +17,7 @@ export const listarPratos = async (req, res) => {
     }
 
     res.json(resultado.rows);
+    console.log("Sucesso ao recuperar dados do banco de dados")
   } catch (error) {
     console.error("Erro no CardapioController ao ler o Postgres:", error);
     res.status(500).json({ error: "Falha interna no servidor." });
